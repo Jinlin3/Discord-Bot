@@ -2,13 +2,20 @@ import discord
 import os
 import requests
 import random
+from replit import db
 from keep_alive import keep_alive
+
+#Configuring intent settings and global variables
 
 intent = discord.Intents.default()
 intent.members = True
 intent.message_content = True
 
 client = discord.Client(intents = intent)
+
+balancingMode = 0
+
+#All cue words and cue results
 
 cues = [
   "christian", 
@@ -66,8 +73,10 @@ rizz = [
   "I'm rich af btw, look at my stacks!"
 ]
 
+#Retrieves a line from the API
+
 def get_line():
-  url = "https://pick-me-up.p.rapidapi.com/dirty"
+  url = "https://pick-me-up.p.rapidapi.com/cheesy"
   headers = {
 	"X-RapidAPI-Key": "36ef312bcemsh00e92d766bf9906p180189jsn5566eae4451b",
 	"X-RapidAPI-Host": "pick-me-up.p.rapidapi.com"
@@ -76,28 +85,64 @@ def get_line():
 
   return (response.text)
 
+#TEAM-BALANCING FUNCTIONS
+
+def upload_players(entry):
+  if "players" in db.keys():
+    players = db["players"]
+    players.append(entry)
+  else:
+    db["players"] = [entry]
+
+def clear_all_players():
+  players = db["players"]
+  for entry in players:
+    del entry
+  db["players"] = players
+
+def balance_on():
+  global balancingMode
+  balancingMode = 1
+
+def balance_off():
+  global balancingMode
+  balancingMode = 0
+
 @client.event
-async def on_ready(): #Triggers when bot turns on
+async def on_ready():
   print('We have logged in as {0.user}'.format(client))
 
-@client.event #Triggers when a message is sent in a channel
+@client.event
 async def on_message(message):
+  global balancingMode
   if message.author == client.user:
     return
 
-  msg = message.content.lower() #Converts message to lowercase for easier comparison
-
-  if any(word in msg for word in pickUpLineCues):
-    await message.channel.send(random.choice(starters))
-    line = get_line()
-    await message.channel.send(line)
-
-  elif any(word in msg for word in shootingCues):
-    await message.channel.send(random.choice(shootingResult))
-
-  elif any(word in msg for word in cues):
-    await message.channel.send(random.choice(cuesResult))
-    await message.channel.send(random.choice(rizz))
-
+  if balancingMode == 1:
+    if message.content.startswith("$balance"):
+      balance_off()
+    else:
+      player = message.content
+      upload_players(player)
+      await message.channel.send("Added " + player + "to Roster!")
+      
+  else:
+    msg = message.content.lower()
+  
+    if msg.startswith("$balance"):
+      balance_on()
+  
+    if any(word in msg for word in pickUpLineCues):
+      await message.channel.send(random.choice(starters))
+      line = get_line()
+      await message.channel.send(line)
+  
+    elif any(word in msg for word in shootingCues):
+      await message.channel.send(random.choice(shootingResult))
+  
+    elif any(word in msg for word in cues):
+      await message.channel.send(random.choice(cuesResult))
+      await message.channel.send(random.choice(rizz))
+  
 keep_alive() #Reboots bot every 5 minutes
 client.run(os.environ['TOKEN'])

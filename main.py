@@ -95,10 +95,7 @@ def upload_players(entry):
     db["players"] = [entry]
 
 def clear_all_players():
-  players = db["players"]
-  for entry in players:
-    del entry
-  db["players"] = players
+  del db["players"]
 
 def balance_on():
   global balancingMode
@@ -108,29 +105,39 @@ def balance_off():
   global balancingMode
   balancingMode = 0
 
+#Event Handlers
+
 @client.event
 async def on_ready():
   print('We have logged in as {0.user}'.format(client))
+
+#Occurs on message
 
 @client.event
 async def on_message(message):
   global balancingMode
   if message.author == client.user:
     return
-
+#Balancing Mode
   if balancingMode == 1:
     if message.content.startswith("$balance"):
       balance_off()
+      await message.channel.send("Balancing Mode Off!")
+    elif message.content.startswith("$clear"):
+      clear_all_players()
+      await message.channel.send("Cleared All Players from the Roster!")
     else:
       player = message.content
       upload_players(player)
-      await message.channel.send("Added " + player + "to Roster!")
-      
+      await message.channel.send("Added " + player + " to Roster!")
+#Normal Bot Functions     
   else:
     msg = message.content.lower()
   
     if msg.startswith("$balance"):
       balance_on()
+      await message.channel.send("Balancing Mode On! Please type in your summoner name and your rank like this:")
+      await message.channel.send("ThePhantomMrJay Silver")
   
     if any(word in msg for word in pickUpLineCues):
       await message.channel.send(random.choice(starters))

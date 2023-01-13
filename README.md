@@ -7,3 +7,6 @@
 ### Websites Used
 * Replit (Online IDE's are good for this type of project)
 * UptimeRobot (Currently pinging the bot every 10 minutes)
+### Commands
+* $balance : Turns on balancing mode
+* $clear (while in balancing mode) : Clears roster

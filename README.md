@@ -10,3 +10,5 @@
 ### Commands
 * $balance : Turns on balancing mode
 * $clear (while in balancing mode) : Clears roster
+* $make (while in balancing mode) : Balances players in roster
+* $print (while in balancing mode) : Prints out roster

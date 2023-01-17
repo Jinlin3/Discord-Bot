@@ -184,11 +184,8 @@ async def on_message(message):
   
     if msg.startswith("$balance"):
       balance_on()
-      await message.channel.send("Balancing Mode On! Please type in your summoner name and your rank like this:")
-      await message.channel.send("**ThePhantomMrJay Iron 4** *(Note: Type 1 after Master, Grandmaster, and Challenger)*")
-      await message.channel.send("After everyone is added, type in the command: **$make**")
-      await message.channel.send("To exit Balancing Mode, type in the command: **$balance**")
-      await message.channel.send("To clear the roster, type in the command: **$clear**")
+      await message.channel.send("Balancing Mode On! Please type in your summoner name and your rank like this: \n**ThePhantomMrJay Iron 4** *(Note: Type 1 after Master, Grandmaster, and Challenger)*")
+      await message.channel.send("After everyone is added, type in the command: **$make** \nTo exit Balancing Mode, type in the command: **$balance**\nTo clear the roster, type in the command: **$clear**")
   
     if any(word in msg for word in pickUpLineCues):
       await message.channel.send(random.choice(starters))

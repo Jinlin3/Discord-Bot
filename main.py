@@ -13,7 +13,7 @@ intent.message_content = True
 
 client = discord.Client(intents = intent)
 
-balancingMode = 0
+teamMode = 0
 
 #All cue words and cue results
 
@@ -97,13 +97,13 @@ def upload_players(entry):
 def clear_all_players():
   del db["players"]
 
-def balance_on():
-  global balancingMode
-  balancingMode = 1
+def team_on():
+  global teamMode
+  teamMode = 1
 
-def balance_off():
-  global balancingMode
-  balancingMode = 0
+def team_off():
+  global teamMode
+  teamMode = 0
 
 #Converts rank to score
 
@@ -158,12 +158,12 @@ async def on_message(message):
   if message.author == client.user:
     return
     
-#Balancing Mode
+#Team Mode
     
-  if balancingMode == 1:
-    if message.content.startswith("$balance"):
-      balance_off()
-      await message.channel.send("Balancing Mode Off!")
+  if teamMode == 1:
+    if message.content.startswith("$team"):
+      team_off()
+      await message.channel.send("Team Mode Off!")
 
     # $clear
       
@@ -171,9 +171,9 @@ async def on_message(message):
       clear_all_players()
       await message.channel.send("Cleared all players from the roster!")
 
-    # $make
+    # $balance
       
-    elif message.content.startswith("$make"):
+    elif message.content.startswith("$balance"):
       await message.channel.send("The Team Balancing function is currently in development!")
 
     # $print
@@ -182,10 +182,11 @@ async def on_message(message):
       players = []
       if "players" in db.keys():
         players = db["players"]
-        list = "__**CURRENT ROSTER**__\n" + db["players"][0]
-        i = 1
+        number = len(players)
+        list = "__**CURRENT ROSTER**__  -  " + str(number) + " Players"
+        i = 0
         while i < len(players):
-          list += " \n" + db["players"][i]
+          list += " \n" + db["players"][i] + " (" + str(i + 1) + ")"
           i = i + 1
         await message.channel.send(list)
       else:
@@ -209,10 +210,10 @@ async def on_message(message):
   else:
     msg = message.content.lower()
   
-    if msg.startswith("$balance"):
-      balance_on()
-      await message.channel.send("Balancing Mode On! Please type in your summoner name and your rank like this: \n**ThePhantomMrJay Iron 4** *(Note: Type 1 after Master, Grandmaster, and Challenger)*")
-      await message.channel.send("After everyone is added, type in the command: **$make** \n\nTo view the roster, type in the command: **$print** \n\nTo clear the roster, type in the command: **$clear** \n\nTo exit Balancing Mode, type in the command: **$balance**")
+    if msg.startswith("$team"):
+      team_on()
+      await message.channel.send("Team Mode On! Everyone please type in your name and your rank like this: \n**Christian Iron 4** \n*(Type 1 after Master, Grandmaster, and Challenger)* \n*(Please make sure your name is one word only)*")
+      await message.channel.send("To balance the teams, type in the command: **$balance** \n\nTo view the roster, type in the command: **$print** \n\nTo clear the roster, type in the command: **$clear** \n\nTo exit Team Mode, type in the command: **$team**")
   
     if any(word in msg for word in pickUpLineCues):
       await message.channel.send(random.choice(starters))
@@ -229,7 +230,7 @@ async def on_message(message):
 #Reboots bot every 30 minutes
 keep_alive()
 
-#
+#Runs kill 1 if there are errors with running the bot
 try:
   client.run(os.environ['TOKEN'])
 except:

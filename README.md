@@ -8,7 +8,7 @@
 * Replit (Online IDE's are good for this type of project)
 * UptimeRobot (Currently pinging the bot every 10 minutes)
 ### Commands
-* $balance : Turns on balancing mode
-* $clear (while in balancing mode) : Clears roster
-* $make (while in balancing mode) : Balances players in roster
-* $print (while in balancing mode) : Prints out roster
+* $team : Turns on team mode
+* $clear (while in team mode) : Clears roster
+* $balance (while in team mode) : Balances players in roster
+* $print (while in team mode) : Prints out roster

@@ -9,6 +9,7 @@
 * UptimeRobot (Currently pinging the bot every 10 minutes)
 ### Commands
 * $team : Turns on team mode
-* $clear (while in team mode) : Clears roster
-* $balance (while in team mode) : Balances players in roster
-* $print (while in team mode) : Prints out roster
+* $del + (Player number) *(while in team mode)* : Deletes a player in the roster by their player number
+* $clear *(while in team mode)* : Clears roster
+* $balance *(while in team mode)* : Balances players in roster
+* $print *(while in team mode)* : Prints out roster

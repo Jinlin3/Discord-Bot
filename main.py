@@ -95,7 +95,7 @@ def upload_players(entry):
     db["players"] = [entry]
 
 def clear_all_players():
-  del db["players"]
+  db["players"].clear()
 
 def team_on():
   global teamMode
@@ -171,6 +171,22 @@ async def on_message(message):
       clear_all_players()
       await message.channel.send("Cleared all players from the roster!")
 
+    # $del
+
+    elif message.content.startswith("$del"):
+      msg = message.content.split(' ')
+      players = []
+      if "players" in db.keys():
+        players = db["players"]
+        number = int(msg[1]) - 1
+        if number > len(players) - 1 or (number) < 0:
+          await message.channel.send("Index out of bounds, please try again!")
+        else:
+          await message.channel.send("**" + players[number] + "**" + " has been removed from the roster!")
+          players.pop(number)
+      else:
+        await message.channel.send("Roster is currently empty!")
+
     # $balance
       
     elif message.content.startswith("$balance"):
@@ -183,7 +199,9 @@ async def on_message(message):
       if "players" in db.keys():
         players = db["players"]
         number = len(players)
-        list = "__**CURRENT ROSTER**__  -  " + str(number) + " Players"
+        list = "__**CURRENT ROSTER**__  -  " + str(number) + " Player"
+        if (number > 1 or number == 0):
+          list += "s"
         i = 0
         while i < len(players):
           list += " \n" + db["players"][i] + " (" + str(i + 1) + ")"
@@ -212,8 +230,8 @@ async def on_message(message):
   
     if msg.startswith("$team"):
       team_on()
-      await message.channel.send("Team Mode On! Everyone please type in your name and your rank like this: \n**Christian Iron 4** \n*(Type 1 after Master, Grandmaster, and Challenger)* \n*(Please make sure your name is one word only)*")
-      await message.channel.send("To balance the teams, type in the command: **$balance** \n\nTo view the roster, type in the command: **$print** \n\nTo clear the roster, type in the command: **$clear** \n\nTo exit Team Mode, type in the command: **$team**")
+      await message.channel.send("Team Mode On! Everyone please type in your name and your rank like this: \n**Christian Iron 4** \n*(Type 1 after Master, Grandmaster, and Challenger)* \n*(Please type in one word for your name)*")
+      await message.channel.send("To balance the teams, type in the command: **$balance** \n\nTo view the roster and player numbers, type in the command: **$print** \n\nTo remove a player, type in the command: **$del** followed by their player number \n\nTo clear the roster, type in the command: **$clear** \n\nTo exit Team Mode, type in the command: **$team**")
   
     if any(word in msg for word in pickUpLineCues):
       await message.channel.send(random.choice(starters))

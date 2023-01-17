@@ -105,7 +105,44 @@ def balance_off():
   global balancingMode
   balancingMode = 0
 
-#Event Handlers
+#Converts rank to score
+
+def convert_rank(list):
+  score = 0
+  tier = list[1].lower()
+  division = list[2]
+  
+  if (tier == "iron"):
+    score = 1
+  elif (tier == "bronze"):
+    score = 2
+  elif (tier == "silver"):
+    score = 3
+  elif (tier == "gold"):
+    score = 4
+  elif ("plat" in tier):
+    score = 5
+  elif ("dia" in tier):
+    score = 6
+  elif (tier == "masters"):
+    score = 7
+  elif ("grand" in tier):
+    score = 8
+  elif ("chall" in tier):
+    score = 9
+
+  if (division == "4"):
+    score += 0.2
+  elif (division == "3"):
+    score += 0.4
+  elif (division == "2"):
+    score += 0.6
+  elif (division == "1"):
+    score += 0.8
+
+  return score
+
+#Occurs on bot start-up
 
 @client.event
 async def on_ready():
@@ -118,7 +155,9 @@ async def on_message(message):
   global balancingMode
   if message.author == client.user:
     return
+    
 #Balancing Mode
+    
   if balancingMode == 1:
     if message.content.startswith("$balance"):
       balance_off()
@@ -127,17 +166,21 @@ async def on_message(message):
       clear_all_players()
       await message.channel.send("Cleared All Players from the Roster!")
     else:
-      player = message.content
-      upload_players(player)
-      await message.channel.send("Added " + player + " to Roster!")
+      msg = message.content
+      list = msg.split(' ')
+      upload_players(list[0])
+      await message.channel.send(list[0] + " has been registered!")
+      
 #Normal Bot Functions     
+      
   else:
     msg = message.content.lower()
   
     if msg.startswith("$balance"):
       balance_on()
       await message.channel.send("Balancing Mode On! Please type in your summoner name and your rank like this:")
-      await message.channel.send("ThePhantomMrJay Silver")
+      await message.channel.send("**ThePhantomMrJay Iron 4**")
+      await message.channel.send("After everyone is added, type in the command: $make")
   
     if any(word in msg for word in pickUpLineCues):
       await message.channel.send(random.choice(starters))

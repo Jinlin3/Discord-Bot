@@ -118,16 +118,16 @@ def convert_rank(list):
     score = 2
   elif (tier.startswith("s")):
     score = 3
-  elif (tier == "gold"):
-    score = 4
+  elif (tier.startswith("gr")):
+    return 8
   elif (tier.startswith("p")):
     score = 5
   elif (tier.startswith("d")):
     score = 6
   elif (tier.startswith("m")):
     return 7
-  elif (tier.startswith("gr")):
-    return 8
+  elif (tier.startswith("g")):
+    score = 4
   elif (tier.startswith("c")):
     return 9
 
@@ -139,6 +139,8 @@ def convert_rank(list):
     score += 0.6
   elif (division == "1"):
     score += 0.8
+  else:
+    score = 0
 
   return score
 
@@ -162,11 +164,35 @@ async def on_message(message):
     if message.content.startswith("$balance"):
       balance_off()
       await message.channel.send("Balancing Mode Off!")
+
+    # $clear
+      
     elif message.content.startswith("$clear"):
       clear_all_players()
-      await message.channel.send("Cleared All Players from the Roster!")
+      await message.channel.send("Cleared all players from the roster!")
+
+    # $make
+      
     elif message.content.startswith("$make"):
       await message.channel.send("The Team Balancing function is currently in development!")
+
+    # $print
+      
+    elif message.content.startswith("$print"):
+      players = []
+      if "players" in db.keys():
+        players = db["players"]
+        list = "__**CURRENT ROSTER**__\n" + db["players"][0]
+        i = 1
+        while i < len(players):
+          list += " \n" + db["players"][i]
+          i = i + 1
+        await message.channel.send(list)
+      else:
+        await message.channel.send("Roster is currently empty!")
+
+    #Adding players to roster
+      
     else:
       msg = message.content
       list = msg.split(' ')
@@ -175,7 +201,8 @@ async def on_message(message):
         await message.channel.send("*Invalid rank! Please try again!*")
       else:
         upload_players(list[0])
-        await message.channel.send("**" + list[0] + "**" + " has been registered! Score: " + str(rank))
+        await message.channel.send("**" + list[0] + "**" + " has been registered!")
+        print(rank)
       
 #Normal Bot Functions     
       
@@ -185,7 +212,7 @@ async def on_message(message):
     if msg.startswith("$balance"):
       balance_on()
       await message.channel.send("Balancing Mode On! Please type in your summoner name and your rank like this: \n**ThePhantomMrJay Iron 4** *(Note: Type 1 after Master, Grandmaster, and Challenger)*")
-      await message.channel.send("After everyone is added, type in the command: **$make** \nTo exit Balancing Mode, type in the command: **$balance**\nTo clear the roster, type in the command: **$clear**")
+      await message.channel.send("After everyone is added, type in the command: **$make** \n\nTo view the roster, type in the command: **$print** \n\nTo clear the roster, type in the command: **$clear** \n\nTo exit Balancing Mode, type in the command: **$balance**")
   
     if any(word in msg for word in pickUpLineCues):
       await message.channel.send(random.choice(starters))

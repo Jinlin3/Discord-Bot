@@ -193,6 +193,12 @@ async def on_message(message):
     elif any(word in msg for word in cues):
       await message.channel.send(random.choice(cuesResult))
       await message.channel.send(random.choice(rizz))
-  
-keep_alive() #Reboots bot every 5 minutes
-client.run(os.environ['TOKEN'])
+      
+#Reboots bot every 30 minutes
+keep_alive()
+
+#
+try:
+  client.run(os.environ['TOKEN'])
+except:
+  os.system("kill 1")

@@ -112,24 +112,24 @@ def convert_rank(list):
   tier = list[1].lower()
   division = list[2]
   
-  if (tier == "iron"):
+  if (tier.startswith("i")):
     score = 1
-  elif (tier == "bronze"):
+  elif (tier.startswith("b")):
     score = 2
-  elif (tier == "silver"):
+  elif (tier.startswith("s")):
     score = 3
   elif (tier == "gold"):
     score = 4
-  elif ("plat" in tier):
+  elif (tier.startswith("p")):
     score = 5
-  elif ("dia" in tier):
+  elif (tier.startswith("d")):
     score = 6
-  elif (tier == "masters"):
-    score = 7
-  elif ("grand" in tier):
-    score = 8
-  elif ("chall" in tier):
-    score = 9
+  elif (tier.startswith("m")):
+    return 7
+  elif (tier.startswith("gr")):
+    return 8
+  elif (tier.startswith("c")):
+    return 9
 
   if (division == "4"):
     score += 0.2
@@ -165,11 +165,17 @@ async def on_message(message):
     elif message.content.startswith("$clear"):
       clear_all_players()
       await message.channel.send("Cleared All Players from the Roster!")
+    elif message.content.startswith("$make"):
+      await message.channel.send("The Team Balancing function is currently in development!")
     else:
       msg = message.content
       list = msg.split(' ')
-      upload_players(list[0])
-      await message.channel.send(list[0] + " has been registered!")
+      rank = convert_rank(list)
+      if rank < 1:
+        await message.channel.send("*Invalid rank! Please try again!*")
+      else:
+        upload_players(list[0])
+        await message.channel.send("**" + list[0] + "**" + " has been registered! Score: " + str(rank))
       
 #Normal Bot Functions     
       
@@ -179,8 +185,10 @@ async def on_message(message):
     if msg.startswith("$balance"):
       balance_on()
       await message.channel.send("Balancing Mode On! Please type in your summoner name and your rank like this:")
-      await message.channel.send("**ThePhantomMrJay Iron 4**")
-      await message.channel.send("After everyone is added, type in the command: $make")
+      await message.channel.send("**ThePhantomMrJay Iron 4** *(Note: Type 1 after Master, Grandmaster, and Challenger)*")
+      await message.channel.send("After everyone is added, type in the command: **$make**")
+      await message.channel.send("To exit Balancing Mode, type in the command: **$balance**")
+      await message.channel.send("To clear the roster, type in the command: **$clear**")
   
     if any(word in msg for word in pickUpLineCues):
       await message.channel.send(random.choice(starters))

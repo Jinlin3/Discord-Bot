@@ -137,6 +137,8 @@ def convert_rank(list):
     score = 4
   elif (tier.startswith("c")):
     return 9
+  else:
+    return 0
 
   if (division == "4"):
     score += 0.2
@@ -150,6 +152,24 @@ def convert_rank(list):
     score = 0
 
   return score
+
+#Sorts players and scores list using Selection Sort 
+
+def sort_lists():
+  players = db["players"]
+  scores = db["scores"]
+  print(players)
+  print(scores)
+  for i in range(len(scores)):
+    min = i
+    for j in range(i + 1, len(scores)):
+      if scores[min] > scores[j]:
+        min = j
+    scores[i], scores[min] = scores[min], scores[i]
+    players[i], players[min] = players[min], players[i]
+  print(players)
+  print(scores)
+  
 
 #Occurs on bot start-up
 
@@ -201,6 +221,7 @@ async def on_message(message):
     # $balance
       
     elif message.content.startswith("$balance"):
+      sort_lists()
       await message.channel.send("The Team Balancing function is currently in development!")
 
     # $print
@@ -227,8 +248,8 @@ async def on_message(message):
       msg = message.content
       list = msg.split(' ')
       
-      name = list[0]
-      rank = convert_rank(list)
+      name = list[0] #name = players name (string)
+      rank = convert_rank(list) #rank = rank score (integer)
       
       if rank < 1:
         await message.channel.send("*Invalid rank! Please try again!*")

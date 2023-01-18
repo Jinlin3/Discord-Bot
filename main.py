@@ -10,7 +10,6 @@ from keep_alive import keep_alive
 intent = discord.Intents.default()
 intent.members = True
 intent.message_content = True
-
 client = discord.Client(intents = intent)
 
 teamMode = 0
@@ -58,7 +57,7 @@ starters = [
 rizz = [
   "I play the broken champs so I can win more!",
   "She's gotta be out there somewhere...",
-  "My rizz is impeccable.",
+  "I'm down bad rn :(",
   "Trung is a lazy bum!",
   "I wish I was a girl, cause then I'd be able to kiss the boys all the time.",
   "I need some dick rn :(",
@@ -302,11 +301,24 @@ async def on_message(message):
     # $balance
       
     elif message.content.startswith("$balance"):
-      sort_lists()
-      balance_teams()
-      shuffle()
-      await message.channel.send("The Team Balancing function is currently in development!")
-
+      if len(db["players"]) < 2:
+        await message.channel.send("Not enough players to create teams!")
+      else:
+        sort_lists()
+        balance_teams()
+        shuffle()
+        team1string = "__**TEAM 1**__\n"
+        team1 = db["team1"]
+        for x in range(len(team1)):
+          team1string += str(x + 1) + "." + " " + team1[x] + "\n"
+        team2string = "__**TEAM 2**__\n"
+        team2 = db["team2"]
+        for x in range(len(team2)):
+          team2string += str(x + 1) + "." + " " + team2[x] + "\n"
+        await message.channel.send(team1string)
+        await message.channel.send(team2string)
+        await message.channel.send("To **reshuffle** the teams, type in the command: **$balance**")
+      
     # $print
       
     elif message.content.startswith("$print"):
@@ -349,7 +361,7 @@ async def on_message(message):
     if msg.startswith("$team"):
       team_on()
       await message.channel.send("Team Mode On! Everyone please type in your name and your rank like this: \n**Christian Iron 4** \n*(Type 1 after Master, Grandmaster, and Challenger)* \n*(Please type in one word for your name)*")
-      await message.channel.send("To balance the teams, type in the command: **$balance** \n\nTo view the roster and player numbers, type in the command: **$print** \n\nTo remove a player, type in the command: **$del** followed by their player number \n\nTo clear the roster, type in the command: **$clear** \n\nTo exit Team Mode, type in the command: **$team**")
+      await message.channel.send("To **balance** the teams, type in the command: **$balance** \n\nTo **view** the roster and player numbers, type in the command: **$print** \n\nTo **remove** a player, type in the command: **$del** followed by their player number \n\nTo **clear** the roster, type in the command: **$clear** \n\nTo **exit** Team Mode, type in the command: **$team**")
   
     if any(word in msg for word in pickUpLineCues):
       await message.channel.send(random.choice(starters))

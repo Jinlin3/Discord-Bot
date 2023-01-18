@@ -2,7 +2,7 @@
 **Multi-purpose discord bot for gaming disguised as Christian Cruz bot as for now... will implement team-balancing features soon!**
 ### Current Objectives
 * Introduce discrepancy values to denote team imbalances when using the $balance command
-* Start implementing team-balancing features
+* Introduce randomizer for teams
 * Stopping Discord from banning the bot every so often
 ### Websites Used
 * Replit (Online IDE's are good for this type of project)

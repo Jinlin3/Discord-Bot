@@ -85,7 +85,9 @@ def get_line():
 
   return (response.text)
 
-#TEAM-BALANCING FUNCTIONS
+#------------TEAM-BALANCING FUNCTIONS------------#
+
+#Uploads a player and their ranking score to the lists
 
 def upload_players(entry, score):
   if "players" in db.keys():
@@ -100,13 +102,19 @@ def upload_players(entry, score):
   else:
     db["scores"] = [score]
 
+#Clears players and scores list
+
 def clear_all_players():
   db["players"].clear()
   db["scores"].clear()
 
+#Turns team mode on
+
 def team_on():
   global teamMode
   teamMode = 1
+
+#Turns team mode off
 
 def team_off():
   global teamMode
@@ -158,18 +166,71 @@ def convert_rank(list):
 def sort_lists():
   players = db["players"]
   scores = db["scores"]
-  print(players)
-  print(scores)
   for i in range(len(scores)):
-    min = i
+    max = i
     for j in range(i + 1, len(scores)):
-      if scores[min] > scores[j]:
-        min = j
-    scores[i], scores[min] = scores[min], scores[i]
-    players[i], players[min] = players[min], players[i]
-  print(players)
-  print(scores)
-  
+      if scores[max] < scores[j]:
+        max = j
+    scores[i], scores[max] = scores[max], scores[i]
+    players[i], players[max] = players[max], players[i]
+
+#Creates team1/team2 team1score/team2score arrays
+
+def balance_teams():
+  print("BALANCING")
+  if "team1" in db.keys():
+    team1 = db["team1"]
+    team1.clear()
+  else:
+    db["team1"] = []
+    team1 = db["team1"]
+
+  if "team1scores" in db.keys():
+    team1scores = db["team1scores"]
+    team1scores.clear()
+  else:
+    db["team1scores"] = []
+    team1scores = db["team1scores"]
+
+  if "team2" in db.keys():
+    team2 = db["team2"]
+    team2.clear()
+  else:
+    db["team2"] = []
+    team2 = db["team2"]
+
+  if "team2scores" in db.keys():
+    team2scores = db["team2scores"]
+    team2scores.clear()
+  else:
+    db["team2scores"] = []
+    team2scores = db["team2scores"]
+
+  players = db["players"]
+  scores = db["scores"]
+
+  if len(players) % 2 == 0: #Method for even-numbered teams
+    for i in range(len(players)):
+      if i % 2 == 0:
+        team1.append(players[i])
+        team1scores.append(scores[i])
+      else:
+        team2.append(players[i])
+        team2scores.append(scores[i])
+  else: #Method for odd-numbered teams
+    team2.append(players[len(players) - 1])
+    for i in range(len(players) - 1):
+      if i % 2 == 0:
+        team1.append(players[i])
+        team1scores.append(scores[i])
+      else:
+        team2.append(players[i])
+        team2scores.append(scores[i])
+    
+  print(team1)
+  print(team1scores)
+  print(team2)
+  print(team2scores)
 
 #Occurs on bot start-up
 
@@ -222,6 +283,7 @@ async def on_message(message):
       
     elif message.content.startswith("$balance"):
       sort_lists()
+      balance_teams()
       await message.channel.send("The Team Balancing function is currently in development!")
 
     # $print

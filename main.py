@@ -232,6 +232,26 @@ def balance_teams():
   print(team2)
   print(team2scores)
 
+#Shuffles team1 and team2 indices
+
+def shuffle():
+  team1 = db["team1"]
+  team2 = db["team2"]
+  team1scores = db["team1scores"]
+  team2scores = db["team2scores"]
+  shuffleNum = len(team1) // 2
+
+  for x in range(shuffleNum):
+    print("SHUFFLED")
+    randomIndex = random.randint(0, len(team1) - 1)
+    team1[randomIndex], team2[randomIndex] = team2[randomIndex], team1[randomIndex]
+    team1scores[randomIndex], team2scores[randomIndex] = team2scores[randomIndex], team1scores[randomIndex]
+
+  print(team1)
+  print(team1scores)
+  print(team2)
+  print(team2scores)
+
 #Occurs on bot start-up
 
 @client.event
@@ -284,6 +304,7 @@ async def on_message(message):
     elif message.content.startswith("$balance"):
       sort_lists()
       balance_teams()
+      shuffle()
       await message.channel.send("The Team Balancing function is currently in development!")
 
     # $print

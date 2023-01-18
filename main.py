@@ -87,15 +87,22 @@ def get_line():
 
 #TEAM-BALANCING FUNCTIONS
 
-def upload_players(entry):
+def upload_players(entry, score):
   if "players" in db.keys():
     players = db["players"]
     players.append(entry)
   else:
     db["players"] = [entry]
 
+  if "scores" in db.keys():
+    scores = db["scores"]
+    scores.append(score)
+  else:
+    db["scores"] = [score]
+
 def clear_all_players():
   db["players"].clear()
+  db["scores"].clear()
 
 def team_on():
   global teamMode
@@ -176,14 +183,18 @@ async def on_message(message):
     elif message.content.startswith("$del"):
       msg = message.content.split(' ')
       players = []
+      scores = []
       if "players" in db.keys():
         players = db["players"]
+        scores = db["scores"]
         number = int(msg[1]) - 1
         if number > len(players) - 1 or (number) < 0:
           await message.channel.send("Index out of bounds, please try again!")
         else:
           await message.channel.send("**" + players[number] + "**" + " has been removed from the roster!")
           players.pop(number)
+          print(str(scores[number]) + " has been removed from the scores list")
+          scores.pop(number)
       else:
         await message.channel.send("Roster is currently empty!")
 
@@ -215,13 +226,16 @@ async def on_message(message):
     else:
       msg = message.content
       list = msg.split(' ')
+      
+      name = list[0]
       rank = convert_rank(list)
+      
       if rank < 1:
         await message.channel.send("*Invalid rank! Please try again!*")
       else:
-        upload_players(list[0])
-        await message.channel.send("**" + list[0] + "**" + " has been registered!")
-        print(rank)
+        upload_players(name, rank)
+        await message.channel.send("**" + name + "**" + " has been registered!")
+        print(name + " " + str(rank))
       
 #Normal Bot Functions     
       

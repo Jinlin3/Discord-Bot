@@ -3,6 +3,7 @@
 ### Current Objectives
 * Introduce discrepancy values to denote team imbalances when using the $balance command
 * Introduce randomizer for teams
+* Improve balancing for odd-numbered teams
 * Stopping Discord from banning the bot every so often
 ### Websites Used
 * Replit (Online IDE's are good for this type of project)

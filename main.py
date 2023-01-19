@@ -246,12 +246,16 @@ def shuffle():
 
   for x in range(shuffleNum):
     print("SHUFFLED")
-    randomIndex = random.randint(0, len(team1) - 1)
+    if len(db["players"]) % 2 == 0:
+      randomIndex = random.randint(0, len(team1) - 1)
+    else:
+      randomIndex = random.randint(1, len(team1) - 1)
     team1[randomIndex], team2[randomIndex] = team2[randomIndex], team1[randomIndex]
     team1scores[randomIndex], team2scores[randomIndex] = team2scores[randomIndex], team1scores[randomIndex]
 
   sort_lists(team1, team1scores)
   sort_lists(team2, team2scores)
+  
   print(team1)
   print(team1scores)
   print(team2)

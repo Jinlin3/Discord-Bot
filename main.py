@@ -162,9 +162,8 @@ def convert_rank(list):
 
 #Sorts players and scores list using Selection Sort 
 
-def sort_lists():
-  players = db["players"]
-  scores = db["scores"]
+def sort_lists(players, scores):
+  print("SORTING")
   for i in range(len(scores)):
     max = i
     for j in range(i + 1, len(scores)):
@@ -172,6 +171,8 @@ def sort_lists():
         max = j
     scores[i], scores[max] = scores[max], scores[i]
     players[i], players[max] = players[max], players[i]
+  print(players)
+  print(scores)
 
 #Creates team1/team2 team1score/team2score arrays
 
@@ -208,6 +209,8 @@ def balance_teams():
   players = db["players"]
   scores = db["scores"]
 
+  print("length of players: " + str(len(players)))
+
   if len(players) % 2 == 0: #Method for even-numbered teams
     for i in range(len(players)):
       if i % 2 == 0:
@@ -218,6 +221,7 @@ def balance_teams():
         team2scores.append(scores[i])
   else: #Method for odd-numbered teams
     team2.append(players[len(players) - 1])
+    team2scores.append(scores[len(scores) - 1])
     for i in range(len(players) - 1):
       if i % 2 == 0:
         team1.append(players[i])
@@ -246,6 +250,8 @@ def shuffle():
     team1[randomIndex], team2[randomIndex] = team2[randomIndex], team1[randomIndex]
     team1scores[randomIndex], team2scores[randomIndex] = team2scores[randomIndex], team1scores[randomIndex]
 
+  sort_lists(team1, team1scores)
+  sort_lists(team2, team2scores)
   print(team1)
   print(team1scores)
   print(team2)
@@ -304,8 +310,14 @@ async def on_message(message):
       if len(db["players"]) < 2:
         await message.channel.send("Not enough players to create teams!")
       else:
-        sort_lists()
+        await message.channel.send("*Generating teams. Might take a moment.*")
+        players = db["players"]
+        scores = db["scores"]
+        await message.channel.send("*Sorting...*")
+        sort_lists(players, scores)
+        await message.channel.send("*Balancing...*")
         balance_teams()
+        await message.channel.send("*Shuffling...*")
         shuffle()
         team1string = "__**TEAM 1**__\n"
         team1 = db["team1"]

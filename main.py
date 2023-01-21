@@ -261,6 +261,32 @@ def shuffle():
   print(team2)
   print(team2scores)
 
+#Creates disparity bar
+
+def make_disparity_string(value):
+  string = "__**TEAM DISPARITY**__ - "
+  if round(value) > 0:
+    string += "Blue Team has an advantage of " + str(round(value)) + " tiers.\n**BLUE**  |  "
+  elif round(value) == 0:
+    string = "Disparity between teams is less than 1 tier.\n**BLUE**  |  "
+  else:
+    string = "Red Team has an advantage of " + str(round(abs(value))) + " tiers.\n**BLUE**  |  "
+  
+  blue = round(value + 5)
+  print("blue = " + str(blue))
+  red = round(10 - blue)
+  print("red = " + str(red))
+  if blue > 10:
+    blue = 10
+  if red > 10:
+    red = 10
+  for x in range(0, blue):
+    string += ":blue_circle:"
+  for x in range(0, red):
+    string += ":red_circle:"
+  string = string + "  |  **RED**"
+  return string
+
 #Occurs on bot start-up
 
 @client.event
@@ -323,17 +349,26 @@ async def on_message(message):
         balance_teams()
         await message.channel.send("*Shuffling...*")
         shuffle()
-        team1string = "__**TEAM 1**__\n"
+
+        #disparity values
+
+        print("Team 1 = " + str(sum(db["team1scores"])))
+        print("Team 2 = " + str(sum(db["team2scores"])))
+        disparityValue = sum(db["team1scores"]) - sum(db["team2scores"])
+        print(disparityValue)
+        disparityString = make_disparity_string(disparityValue)
+        
+        team1string = "__**BLUE TEAM**__\n"
         team1 = db["team1"]
         for x in range(len(team1)):
           team1string += str(x + 1) + "." + " " + team1[x] + "\n"
-        team2string = "__**TEAM 2**__\n"
+        team2string = "__**RED TEAM**__\n"
         team2 = db["team2"]
         for x in range(len(team2)):
           team2string += str(x + 1) + "." + " " + team2[x] + "\n"
         await message.channel.send(team1string)
         await message.channel.send(team2string)
-        await message.channel.send("To **reshuffle** the teams, type in the command: **$balance**")
+        await message.channel.send(disparityString + "\nTo **reshuffle** the teams, type in the command: **$balance**")
       
     # $print
       

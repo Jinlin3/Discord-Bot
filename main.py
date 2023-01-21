@@ -266,11 +266,11 @@ def shuffle():
 def make_disparity_string(value):
   string = "__**TEAM DISPARITY**__ - "
   if round(value) > 0:
-    string += "Blue Team has an advantage of " + str(round(value)) + " tiers.\n**BLUE**  |  "
+    string += "Blue Team has an advantage of " + str(round(value)) + " tier(s)\n**BLUE**  |  "
   elif round(value) == 0:
     string = "Disparity between teams is less than 1 tier.\n**BLUE**  |  "
   else:
-    string = "Red Team has an advantage of " + str(round(abs(value))) + " tiers.\n**BLUE**  |  "
+    string = "Red Team has an advantage of " + str(round(abs(value))) + " tier(s)\n**BLUE**  |  "
   
   blue = round(value + 5)
   print("blue = " + str(blue))

@@ -163,7 +163,7 @@ def convert_rank(list):
 #Sorts players and scores list using Selection Sort 
 
 def sort_lists(players, scores):
-  print("SORTING")
+  print("---SORTING---")
   for i in range(len(scores)):
     max = i
     for j in range(i + 1, len(scores)):
@@ -177,7 +177,7 @@ def sort_lists(players, scores):
 #Creates team1/team2 team1score/team2score arrays
 
 def balance_teams():
-  print("BALANCING")
+  print("---BALANCING---")
   if "team1" in db.keys():
     team1 = db["team1"]
     team1.clear()
@@ -245,7 +245,7 @@ def shuffle():
   shuffleNum = len(team1) // 2
 
   for x in range(shuffleNum):
-    print("SHUFFLED")
+    print("---SHUFFLED---")
     if len(db["players"]) % 2 == 0:
       randomIndex = random.randint(0, len(team1) - 1)
     else:
@@ -263,28 +263,35 @@ def shuffle():
 
 #Creates disparity bar
 
-def make_disparity_string(value):
+def make_disparity_string():
+  value = sum(db["team1scores"]) - sum(db["team2scores"])
+  totalPoints = sum(db["team1scores"]) + sum(db["team2scores"])
+  blueCircles = (sum(db["team1scores"]) / totalPoints) * 10
+  bluePercentage = str(round(blueCircles * 10, 1)) + "%"
+  redPercentage = str(100 - round(blueCircles * 10, 1)) + "%"
+  
+  print("disparity is: " + str(value))
+  print("total points is: " + str(totalPoints))
+  print("blue's circle count: " + str(blueCircles))
+  
   string = "__**TEAM DISPARITY**__ - "
   if round(value) > 0:
-    string += "Blue Team has an advantage of " + str(round(value)) + " tier(s)\n**BLUE**  |  "
+    string += "Blue Team has an advantage of " + str(round(value)) + " tier(s)\n" + bluePercentage + " **BLUE**  |  "
   elif round(value) == 0:
-    string = "Disparity between teams is less than 1 tier.\n**BLUE**  |  "
+    string = "Disparity between teams is less than 1 tier\n" + bluePercentage + " **BLUE**  |  "
   else:
-    string = "Red Team has an advantage of " + str(round(abs(value))) + " tier(s)\n**BLUE**  |  "
+    string = "Red Team has an advantage of " + str(round(abs(value))) + " tier(s)\n" + bluePercentage + " **BLUE**  |  "
   
-  blue = round(value + 5)
+  blue = round(blueCircles)
   print("blue = " + str(blue))
   red = round(10 - blue)
   print("red = " + str(red))
-  if blue > 10:
-    blue = 10
-  if red > 10:
-    red = 10
+  
   for x in range(0, blue):
     string += ":blue_circle:"
   for x in range(0, red):
     string += ":red_circle:"
-  string = string + "  |  **RED**"
+  string = string + "  |  **RED** " + redPercentage
   return string
 
 #Occurs on bot start-up
@@ -354,9 +361,7 @@ async def on_message(message):
 
         print("Team 1 = " + str(sum(db["team1scores"])))
         print("Team 2 = " + str(sum(db["team2scores"])))
-        disparityValue = sum(db["team1scores"]) - sum(db["team2scores"])
-        print(disparityValue)
-        disparityString = make_disparity_string(disparityValue)
+        disparityString = make_disparity_string()
         
         team1string = "__**BLUE TEAM**__\n"
         team1 = db["team1"]

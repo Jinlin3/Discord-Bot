@@ -1,10 +1,11 @@
 # Discord-Bot
 **Multi-purpose discord bot for gaming disguised as Christian Cruz bot as for now...**
 ### Usage
-1. Great for gaming servers
+#### 1. Great for Gaming Servers!
   * Able to balance teams for in-house custom games for League of Legends!
-  * Able to come up with random pick-up lines!
-  * Has the personality of Christian Cruz (will respond whenever called in chat)
+  * Able to randomize teams! **(IN DEVELOPMENT)**
+#### 2. Able to come up with random pick-up lines!
+#### 3. Has the personality of Christian Cruz (will respond whenever mentioned in chat)
 ### Current Objectives
 * Introduce randomizer for teams
 * Stopping Discord from banning the bot every so often

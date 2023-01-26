@@ -298,8 +298,9 @@ def make_disparity_string():
   value = sum(db["team1scores"]) - sum(db["team2scores"])
   totalPoints = sum(db["team1scores"]) + sum(db["team2scores"])
   blueCircles = (sum(db["team1scores"]) / totalPoints) * 10
+  redCircles = 10 - blueCircles
   bluePercentage = str(round(blueCircles * 10, 1)) + "%"
-  redPercentage = str(100 - round(blueCircles * 10, 1)) + "%"
+  redPercentage = str(round(redCircles * 10, 1)) + "%"
   
   print("disparity is: " + str(value))
   print("total points is: " + str(totalPoints))

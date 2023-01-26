@@ -13,6 +13,7 @@ intent.message_content = True
 client = discord.Client(intents = intent)
 
 teamMode = 0
+alreadySorted = 0
 
 #All cue words and cue results
 
@@ -336,7 +337,8 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
-  global balancingMode
+  global teamMode
+  global alreadySorted
   if message.author == client.user:
     return
     
@@ -350,6 +352,7 @@ async def on_message(message):
     # $clear
       
     elif message.content.startswith("$clear"):
+      alreadySorted = 0
       clear_all_players()
       await message.channel.send("Cleared all players from the roster!")
 
@@ -366,6 +369,7 @@ async def on_message(message):
         if number > len(players) - 1 or (number) < 0:
           await message.channel.send("Index out of bounds, please try again!")
         else:
+          alreadySorted = 0
           await message.channel.send("**" + players[number] + "**" + " has been removed from the roster!")
           players.pop(number)
           print(str(scores[number]) + " has been removed from the scores list")
@@ -376,36 +380,40 @@ async def on_message(message):
     # $balance
       
     elif message.content.startswith("$balance"):
-      if len(db["players"]) < 2:
-        await message.channel.send("Not enough players to create teams!")
-      else:
-        await message.channel.send("*Generating teams. Might take a moment.*")
-        players = db["players"]
-        scores = db["scores"]
-        await message.channel.send("*Sorting...*")
-        sort_lists(players, scores)
-        await message.channel.send("*Balancing...*")
-        balance_teams()
-        await message.channel.send("*Shuffling...*")
-        shuffle()
+      if alreadySorted == 0: #only sorts and balances if it needs to
+        if len(db["players"]) < 2:
+          await message.channel.send("Not enough players to create teams!")
+        else:
+          await message.channel.send("*Generating teams. Might take a moment.*")
+          players = db["players"]
+          scores = db["scores"]
+          await message.channel.send("*Sorting...*")
+          sort_lists(players, scores)
+          await message.channel.send("*Balancing...*")
+          balance_teams()
+          
+      await message.channel.send("*Shuffling...*")
+      shuffle()
+        
+      alreadySorted = 1
 
         #disparity values
 
-        print("Team 1 = " + str(sum(db["team1scores"])))
-        print("Team 2 = " + str(sum(db["team2scores"])))
-        disparityString = make_disparity_string()
+      print("Team 1 = " + str(sum(db["team1scores"])))
+      print("Team 2 = " + str(sum(db["team2scores"])))
+      disparityString = make_disparity_string()
         
-        team1string = "__**BLUE TEAM**__\n"
-        team1 = db["team1"]
-        for x in range(len(team1)):
-          team1string += str(x + 1) + "." + " " + team1[x] + "\n"
-        team2string = "__**RED TEAM**__\n"
-        team2 = db["team2"]
-        for x in range(len(team2)):
-          team2string += str(x + 1) + "." + " " + team2[x] + "\n"
-        await message.channel.send(team1string)
-        await message.channel.send(team2string)
-        await message.channel.send(disparityString + "\nTo **reshuffle** the teams, type in the command: **$balance**")
+      team1string = "__**BLUE TEAM**__\n"
+      team1 = db["team1"]
+      for x in range(len(team1)):
+        team1string += str(x + 1) + "." + " " + team1[x] + "\n"
+      team2string = "__**RED TEAM**__\n"
+      team2 = db["team2"]
+      for x in range(len(team2)):
+        team2string += str(x + 1) + "." + " " + team2[x] + "\n"
+      await message.channel.send(team1string)
+      await message.channel.send(team2string)
+      await message.channel.send(disparityString + "\nTo **reshuffle** the teams, type in the command: **$balance**")
       
     # $print
       
@@ -437,6 +445,7 @@ async def on_message(message):
       if rank < 1:
         await message.channel.send("*Invalid rank! Please try again!*")
       else:
+        alreadySorted = 0
         upload_players(name, rank)
         await message.channel.send("**" + name + "**" + " has been registered!")
         print(name + " " + str(rank))

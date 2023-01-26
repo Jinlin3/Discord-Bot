@@ -1,7 +1,6 @@
 # Discord-Bot
 **Multi-purpose discord bot for gaming disguised as Christian Cruz bot as for now... will implement team-balancing features soon!**
 ### Current Objectives
-* Add a $shuffle command to just shuffle the teams rather than balancing it all over again
 * Introduce randomizer for teams
 * Stopping Discord from banning the bot every so often
 ### Websites Used

@@ -1,11 +1,16 @@
 # Discord-Bot
-**Multi-purpose discord bot for gaming disguised as Christian Cruz bot as for now... will implement team-balancing features soon!**
+**Multi-purpose discord bot for gaming disguised as Christian Cruz bot as for now...**
+### Usage
+1. Great for gaming servers
+  * Able to balance teams for in-house custom games for League of Legends!
+  * Able to come up with random pick-up lines!
+  * Has the personality of Christian Cruz (will respond whenever called in chat)
 ### Current Objectives
 * Introduce randomizer for teams
 * Stopping Discord from banning the bot every so often
 ### Websites Used
 * Replit (Online IDE's are good for this type of project)
-* UptimeRobot (Currently pinging the bot every 10 minutes)
+* UptimeRobot (Currently pinging the bot every 30 minutes)
 ### Commands
 * $team : Turns on team mode
 * $del + (Player number) *(while in team mode)* : Deletes a player in the roster by their player number

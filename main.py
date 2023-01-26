@@ -174,6 +174,15 @@ def sort_lists(players, scores):
   print(players)
   print(scores)
 
+def sort_list(list):
+  print("---SORTING---")
+  for i in range(len(list)):
+    max = i
+    for j in range(i + 1, len(list)):
+      if list[max] < list[j]:
+        max = j
+    list[i], list[max] = list[max], list[i]
+
 #Creates team1/team2 team1score/team2score arrays
 
 def balance_teams():
@@ -238,20 +247,42 @@ def balance_teams():
 #Shuffles team1 and team2 indices
 
 def shuffle():
+  print("---SHUFFLING---")
   team1 = db["team1"]
   team2 = db["team2"]
+  players = db["players"]
   team1scores = db["team1scores"]
   team2scores = db["team2scores"]
   shuffleNum = len(team1) // 2
 
-  for x in range(shuffleNum):
-    print("---SHUFFLED---")
-    if len(db["players"]) % 2 == 0:
-      randomIndex = random.randint(0, len(team1) - 1)
+  if "randomIndex" in db.keys():
+    randomIndex = db["randomIndex"]
+    randomIndex.clear()
+  else:
+    db["randomIndex"] = []
+    randomIndex = db["randomIndex"]
+
+  while len(randomIndex) != shuffleNum:
+    if len(players) % 2 == 0:
+      number = random.randint(0, len(team1) - 1)
+      randomIndex.append(number)
     else:
-      randomIndex = random.randint(1, len(team1) - 1)
-    team1[randomIndex], team2[randomIndex] = team2[randomIndex], team1[randomIndex]
-    team1scores[randomIndex], team2scores[randomIndex] = team2scores[randomIndex], team1scores[randomIndex]
+      number = random.randint(1, len(team1) - 1)
+      randomIndex.append(number)
+
+    print("random number is: " + str(number))
+
+    sort_list(randomIndex)
+
+    if len(randomIndex) > 1:
+      if randomIndex[len(randomIndex) - 1] == randomIndex[len(randomIndex) - 2]:
+        randomIndex.pop()
+
+  print(randomIndex)
+      
+  for x in randomIndex:
+    team1[x], team2[x] = team2[x], team1[x]
+    team1scores[x], team2scores[x] = team2scores[x], team1scores[x]
 
   sort_lists(team1, team1scores)
   sort_lists(team2, team2scores)

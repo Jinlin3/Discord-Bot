@@ -15,37 +15,9 @@ client = discord.Client(intents = intent)
 teamMode = 0
 alreadySorted = 0
 
-#All cue words and cue results
-
-cues = [
-  "christian", 
-  "cruz", 
-  "paul", 
-  "salunga",
-  "sorce", 
-  "chris",
-  "ohcool",
-]
-
-shootingCues = ["aim", "shoot", "fps", "csgo", "valorant", "val"]
-
-cuesResult = [
-  "This might be outta pocket but...",
-  "Did someone call for me?",
-  "Never fear! Christian is here!",
-  "Yeooo!",
-]
-
-shootingResult = [
-  "Did anyone mention shooting? I have top 1% aim btw!",
-  "Not to be cocky, but I think my aim is the best on this server!",
-  "Back when I played csgo, I was silver... but I def deserved Global Elite!",
-  "If I played Valorant seriously, I would be Radiant fosho! No cap!"
-]
-
 #Below is for pick-up line API
 
-pickUpLineCues = ["rizz", "love", "down bad"]
+pickUpLineCues = ["rizz", "love", "pickup"]
 
 starters = [
   "Lemme rizz you up baby.",
@@ -53,24 +25,6 @@ starters = [
   "I'll seduce you with this one.",
   "Let me mystify you.",
   "I'll satisfy your desires."
-]
-
-rizz = [
-  "I play the broken champs so I can win more!",
-  "She's gotta be out there somewhere...",
-  "I'm down bad rn :(",
-  "Trung is a lazy bum!",
-  "I wish I was a girl, cause then I'd be able to kiss the boys all the time.",
-  "I need some dick rn :(",
-  "I love coom <3!",
-  "Osu!",
-  "Top 1% in all stats btw!",
-  "You know what would be nice rn? Some juicy cack ;)",
-  "My penis --> 8=============D",
-  "My name is Christian, but you can call me handsome ;)",
-  "Riven, Irelia, Ekko, Yasuo, Kassadin... They're all balanced!",
-  "The girls used to call me hot honey back in high school.",
-  "I'm rich af btw, look at my stacks!"
 ]
 
 #Retrieves a line from the API

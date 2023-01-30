@@ -418,13 +418,6 @@ async def on_message(message):
       await message.channel.send(random.choice(starters))
       line = get_line()
       await message.channel.send(line)
-  
-    elif any(word in msg for word in shootingCues):
-      await message.channel.send(random.choice(shootingResult))
-  
-    elif any(word in msg for word in cues):
-      await message.channel.send(random.choice(cuesResult))
-      await message.channel.send(random.choice(rizz))
       
 #Reboots bot every 30 minutes
 keep_alive()

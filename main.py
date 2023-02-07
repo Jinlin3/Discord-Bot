@@ -411,7 +411,7 @@ async def on_message(message):
   
     if msg.startswith("$team"):
       team_on()
-      await message.channel.send("Team Mode On! Everyone please type in your name and your rank like this: \n**Christian Iron 4** \n*(Type 1 after Master, Grandmaster, and Challenger)* \n*(Please type in one word for your name)*")
+      await message.channel.send("Team Mode On! Everyone please type in your name and your rank like this: \n**Jinlin Gold 2** \n*(Type 1 after Master, Grandmaster, and Challenger)* \n*(Please type in one word for your name)*")
       await message.channel.send("To **balance** the teams, type in the command: **$balance** \n\nTo **view** the roster and player numbers, type in the command: **$print** \n\nTo **remove** a player, type in the command: **$del** followed by their player number \n\nTo **clear** the roster, type in the command: **$clear** \n\nTo **exit** Team Mode, type in the command: **$team**")
   
     if any(word in msg for word in pickUpLineCues):
